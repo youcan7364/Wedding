@@ -2,7 +2,10 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, user-scalable=no"
+  />
   <title>우리의 결혼식에 초대합니다</title>
 
   <style>
@@ -37,7 +40,7 @@
       padding-bottom:80px;
     }
 
-    /* 상단 히어로 */
+    /* ===== 상단 히어로 ===== */
     header.hero {
       background:var(--card);
       border-bottom:1px solid var(--border);
@@ -69,7 +72,7 @@
       line-height:1.4;
     }
 
-    /* 섹션 공통 */
+    /* ===== 공통 섹션 ===== */
     section {
       background:var(--card);
       border-bottom:1px solid var(--border);
@@ -94,7 +97,7 @@
       white-space:pre-line;
     }
 
-    /* 정보 카드 */
+    /* ===== 정보 카드 ===== */
     .info-card {
       border:1px solid var(--border);
       border-radius:12px;
@@ -122,7 +125,7 @@
       font-weight:500;
     }
 
-    /* 버튼 스타일 */
+    /* ===== 버튼 스타일 ===== */
     .button-list {
       display:flex;
       flex-wrap:wrap;
@@ -175,34 +178,45 @@
       gap:10px;
     }
 
-    /* ----- 랜덤 모자이크 갤러리 ----- */
+    /* ===== 갤러리 (3열, big/small 리듬) =====
+       - 전체 가로 3칸
+       - 한 칸 높이 크게 (140px)
+       - big = 2x2, small = 1x1
+       - dense로 위에서부터 채우도록 시도
+    */
     .gallery-wrap {
       display:grid;
-      /* 15칸 격자 기반 (가로 15 등분) */
-      grid-template-columns: repeat(15, 1fr);
-      /* 각 행 높이 = 한 칸의 기본 높이. 화면폭 기준으로 반응형 스케일 */
-      grid-auto-rows: calc(100vw / 15);
-      gap:4px;
+      grid-template-columns:repeat(3, 1fr);
+      grid-auto-rows:140px;
+      grid-auto-flow:dense;
+      gap:6px;
       margin-top:16px;
-      max-width:480px;
-      margin-left:auto;
-      margin-right:auto;
     }
 
     .gallery-item {
-      position: relative;
-      width: 100%;
-      height: 100%;
+      position:relative;
       border-radius:8px;
-      border:1px solid var(--border);
       overflow:hidden;
-      cursor:pointer;
+      border:1px solid var(--border);
       background:#ddd;
+      cursor:pointer;
       transition:transform 0.15s ease;
     }
 
     .gallery-item:active {
       transform:scale(0.97);
+    }
+
+    /* 작은 타일 */
+    .gallery-item.small {
+      grid-column:span 1;
+      grid-row:span 1;
+    }
+
+    /* 큰 타일 */
+    .gallery-item.big {
+      grid-column:span 2;
+      grid-row:span 2;
     }
 
     .gallery-item img {
@@ -211,9 +225,11 @@
       width:100%;
       height:100%;
       object-fit:cover;
+      object-position: top; /* ← 위쪽 기준으로 잘라서 얼굴 위주로 노출 */
+      display:block;
     }
 
-    /* 전체 화면 라이트박스 */
+    /* ===== 전체 화면 라이트박스 ===== */
     .fullscreen-viewer {
       position:fixed;
       left:0;
@@ -228,6 +244,18 @@
       padding:20px;
       z-index:10000;
       color:#fff;
+    }
+
+    .lightbox-topbar {
+      position:absolute;
+      top:20px;
+      left:0;
+      right:0;
+      text-align:center;
+      font-size:0.9rem;
+      color:#fff;
+      font-weight:500;
+      pointer-events:none;
     }
 
     .fullscreen-img {
@@ -254,7 +282,6 @@
       justify-content:center;
       cursor:pointer;
       user-select:none;
-      transition:background 0.2s ease;
     }
 
     .nav-left { left:16px; }
@@ -275,11 +302,7 @@
       -webkit-tap-highlight-color:transparent;
     }
 
-    .close-fullscreen-btn:active {
-      background:#ffffff33;
-    }
-
-    /* BGM 풍선 */
+    /* ===== 떠 있는 BGM 풍선 ===== */
     .bgm-bubble {
       position: fixed;
       right: 16px;
@@ -331,7 +354,7 @@
       border-top:1px solid var(--border);
     }
 
-    /* 계좌 모달 */
+    /* ===== 계좌 모달 ===== */
     .modal-backdrop {
       position:fixed;
       left:0;
@@ -353,6 +376,7 @@
       border-radius:14px;
       padding:20px 20px 16px;
       box-shadow:0 20px 40px rgba(0,0,0,0.18);
+      position:relative;
     }
 
     .modal-title {
@@ -380,21 +404,20 @@
       background:var(--accent);
       color:#fff;
       border-radius:10px;
+      text-decoration:none;
       font-size:0.9rem;
       padding:12px;
       font-weight:500;
       border:none;
     }
 
-    a {
-      color:inherit;
-    }
+    a { color:inherit; }
   </style>
 </head>
 <body>
 <div class="page">
 
-  <!-- 상단 히어로 -->
+  <!-- ===== 히어로 ===== -->
   <header class="hero">
     <img class="hero-photo" src="main_photo.jpg" alt="우리 사진" />
     <div class="names">안성모 · 김세은</div>
@@ -404,14 +427,14 @@
     </div>
   </header>
 
-  <!-- 음악 컨트롤 풍선 -->
+  <!-- ===== 음악 컨트롤 풍선 ===== -->
   <div id="bgmBubble" class="bgm-bubble">
     <div class="note-anim">🎵</div>
     <div class="bgm-label">탭해서 소리 켜기</div>
   </div>
   <audio id="bgmAudio" src="song.mp3" loop playsinline></audio>
 
-  <!-- 초대글 -->
+  <!-- ===== 초대의 글 ===== -->
   <section>
     <div class="section-title">INVITATION</div>
     <div class="invitation-text">
@@ -428,7 +451,7 @@
     </div>
   </section>
 
-  <!-- 예식 안내 -->
+  <!-- ===== 예식 정보 / 지도 / 연락처 ===== -->
   <section>
     <div class="section-title">WEDDING DAY</div>
 
@@ -492,7 +515,7 @@
 
   </section>
 
-  <!-- 축하 메시지 -->
+  <!-- ===== 메시지 남기기 ===== -->
   <section>
     <div class="section-title">MESSAGE</div>
 
@@ -509,35 +532,54 @@
     </div>
   </section>
 
-  <!-- OUR MOMENTS: 랜덤 모자이크 갤러리 -->
+  <!-- ===== OUR MOMENTS (3열, 20장, big 리듬 분산) ===== -->
   <section>
     <div class="section-title">OUR MOMENTS</div>
 
-    <div class="gallery-wrap" id="galleryWrap">
-      <div class="gallery-item" data-index="1"><img src="photo1.jpg" alt="사진 1"/></div>
-      <div class="gallery-item" data-index="2"><img src="photo2.jpg" alt="사진 2"/></div>
-      <div class="gallery-item" data-index="3"><img src="photo3.jpg" alt="사진 3"/></div>
-      <div class="gallery-item" data-index="4"><img src="photo4.jpg" alt="사진 4"/></div>
-      <div class="gallery-item" data-index="5"><img src="photo5.jpg" alt="사진 5"/></div>
-      <div class="gallery-item" data-index="6"><img src="photo6.jpg" alt="사진 6"/></div>
-      <div class="gallery-item" data-index="7"><img src="photo7.jpg" alt="사진 7"/></div>
-      <div class="gallery-item" data-index="8"><img src="photo8.jpg" alt="사진 8"/></div>
-      <div class="gallery-item" data-index="9"><img src="photo9.jpg" alt="사진 9"/></div>
-      <div class="gallery-item" data-index="10"><img src="photo10.jpg" alt="사진 10"/></div>
-      <div class="gallery-item" data-index="11"><img src="photo11.jpg" alt="사진 11"/></div>
-      <div class="gallery-item" data-index="12"><img src="photo12.jpg" alt="사진 12"/></div>
-      <div class="gallery-item" data-index="13"><img src="photo13.jpg" alt="사진 13"/></div>
-      <div class="gallery-item" data-index="14"><img src="photo14.jpg" alt="사진 14"/></div>
-      <div class="gallery-item" data-index="15"><img src="photo15.jpg" alt="사진 15"/></div>
-      <div class="gallery-item" data-index="16"><img src="photo16.jpg" alt="사진 16"/></div>
-      <div class="gallery-item" data-index="17"><img src="photo17.jpg" alt="사진 17"/></div>
-      <div class="gallery-item" data-index="18"><img src="photo18.jpg" alt="사진 18"/></div>
-      <div class="gallery-item" data-index="19"><img src="photo19.jpg" alt="사진 19"/></div>
-      <div class="gallery-item" data-index="20"><img src="photo20.jpg" alt="사진 20"/></div>
+    <div class="gallery-wrap">
+      <!-- 강한 시작: big highlight -->
+      <div class="gallery-item big"   data-index="1"><img src="photo1.jpg"  alt="photo1"></div>
+      <div class="gallery-item small" data-index="2"><img src="photo2.jpg"  alt="photo2"></div>
+      <div class="gallery-item small" data-index="3"><img src="photo3.jpg"  alt="photo3"></div>
+
+      <!-- 부드러운 연결 -->
+      <div class="gallery-item small" data-index="4"><img src="photo4.jpg"  alt="photo4"></div>
+
+      <!-- 두 번째 하이라이트 big -->
+      <div class="gallery-item big"   data-index="5"><img src="photo5.jpg"  alt="photo5"></div>
+
+      <!-- 템포 가볍게 -->
+      <div class="gallery-item small" data-index="6"><img src="photo6.jpg"  alt="photo6"></div>
+      <div class="gallery-item small" data-index="7"><img src="photo7.jpg"  alt="photo7"></div>
+
+      <!-- 세 번째 big 중간부 피크 -->
+      <div class="gallery-item big"   data-index="8"><img src="photo8.jpg"  alt="photo8"></div>
+
+      <!-- 다시 스냅 컷들 -->
+      <div class="gallery-item small" data-index="9"><img src="photo9.jpg"   alt="photo9"></div>
+      <div class="gallery-item small" data-index="10"><img src="photo10.jpg" alt="photo10"></div>
+      <div class="gallery-item small" data-index="11"><img src="photo11.jpg" alt="photo11"></div>
+
+      <!-- 네 번째 big로 한 번 더 강조 -->
+      <div class="gallery-item big"   data-index="12"><img src="photo12.jpg" alt="photo12"></div>
+
+      <!-- 디테일 컷들 -->
+      <div class="gallery-item small" data-index="13"><img src="photo13.jpg" alt="photo13"></div>
+      <div class="gallery-item small" data-index="14"><img src="photo14.jpg" alt="photo14"></div>
+      <div class="gallery-item small" data-index="15"><img src="photo15.jpg" alt="photo15"></div>
+
+      <!-- 마지막 구간으로 갈 때 한 번 더 big -->
+      <div class="gallery-item big"   data-index="16"><img src="photo16.jpg" alt="photo16"></div>
+
+      <!-- 엔딩 컷들 -->
+      <div class="gallery-item small" data-index="17"><img src="photo17.jpg" alt="photo17"></div>
+      <div class="gallery-item small" data-index="18"><img src="photo18.jpg" alt="photo18"></div>
+      <div class="gallery-item small" data-index="19"><img src="photo19.jpg" alt="photo19"></div>
+      <div class="gallery-item small" data-index="20"><img src="photo20.jpg" alt="photo20"></div>
     </div>
   </section>
 
-  <!-- 마음 전하실 곳 -->
+  <!-- ===== 계좌 안내 ===== -->
   <section>
     <div class="section-title">마음 전하실 곳</div>
 
@@ -555,15 +597,16 @@
     </div>
   </section>
 
+  <!-- ===== 푸터 ===== -->
   <footer>
     감사한 걸음, 오래 기억하겠습니다.
     <br/><br/>
     © 2025 S & S Wedding
   </footer>
 
-</div> <!-- /.page -->
+</div> <!-- .page 끝 -->
 
-<!-- 계좌 모달 -->
+<!-- ===== 계좌 모달 ===== -->
 <div id="accountModal" class="modal-backdrop">
   <div class="modal">
     <div class="modal-title">마음 전하실 곳</div>
@@ -584,8 +627,9 @@
   </div>
 </div>
 
-<!-- 전체 화면 이미지 뷰어 -->
+<!-- ===== 전체 화면 라이트박스 ===== -->
 <div id="fullscreenViewer" class="fullscreen-viewer">
+  <div class="lightbox-topbar" id="lightboxCounter">1 / 20</div>
   <div class="nav-arrow nav-left" id="prevArrow">◀</div>
   <img id="fullscreenImg" class="fullscreen-img" src="" alt="확대 이미지" />
   <div class="nav-arrow nav-right" id="nextArrow">▶</div>
@@ -593,7 +637,7 @@
 </div>
 
 <script>
-  /* ====== 계좌 모달 ====== */
+  /* ===== 계좌 모달 ===== */
   function openModal() {
     document.getElementById("accountModal").style.display = "flex";
   }
@@ -601,30 +645,17 @@
     document.getElementById("accountModal").style.display = "none";
   }
 
-  /* ====== 랜덤 모자이크 갤러리 셀 크기 지정 ======
-     각 아이템에 5x5 또는 10x10 셀 크기를 랜덤으로 부여 */
-  const galleryItems = document.querySelectorAll('.gallery-wrap .gallery-item');
-  galleryItems.forEach(item => {
-    const isBig = Math.random() < 0.4; // 40%는 큰 블럭, 60%는 작은 블럭
-    const smallSpan = 5;  // 작은 블럭은 5칸 x 5칸
-    const bigSpan   = 10; // 큰 블럭은 10칸 x 10칸
-
-    const span = isBig ? bigSpan : smallSpan;
-
-    item.style.gridColumn = `span ${span}`;
-    item.style.gridRow    = `span ${span}`;
-  });
-
-  /* ====== 라이트박스 / 전체 화면 뷰어 ====== */
+  /* ===== 라이트박스 ===== */
   const thumbs = document.querySelectorAll('.gallery-item');
   const viewer = document.getElementById('fullscreenViewer');
   const viewerImg = document.getElementById('fullscreenImg');
   const closeBtn = document.getElementById('closeFullscreen');
   const prevArrow = document.getElementById('prevArrow');
   const nextArrow = document.getElementById('nextArrow');
+  const counterEl = document.getElementById('lightboxCounter');
 
+  const totalPhotos = 20; // photo1 ~ photo20
   let currentIndex = 1;
-  const totalPhotos = 20; // photo1.jpg ~ photo20.jpg
 
   thumbs.forEach(item => {
     item.addEventListener('click', () => {
@@ -633,10 +664,15 @@
     });
   });
 
-  function openViewer() {
+  function updateViewer() {
     viewerImg.src = `photo${currentIndex}.jpg`;
+    counterEl.textContent = `${currentIndex} / ${totalPhotos}`;
+  }
+
+  function openViewer() {
     viewer.style.display = 'flex';
     document.body.style.overflow = 'hidden';
+    updateViewer();
   }
 
   function closeViewer() {
@@ -646,12 +682,12 @@
 
   function showPrev() {
     currentIndex = currentIndex > 1 ? currentIndex - 1 : totalPhotos;
-    viewerImg.src = `photo${currentIndex}.jpg`;
+    updateViewer();
   }
 
   function showNext() {
     currentIndex = currentIndex < totalPhotos ? currentIndex + 1 : 1;
-    viewerImg.src = `photo${currentIndex}.jpg`;
+    updateViewer();
   }
 
   prevArrow.addEventListener('click', (e) => {
@@ -680,12 +716,12 @@
     }
   });
 
-  /* ====== BGM 자동 무음 재생 + 풍선 토글 ====== */
+  /* ===== 배경음악 (무음 자동재생 후, 탭해서 소리 켜기) ===== */
   const bgmAudio = document.getElementById("bgmAudio");
   const bgmBubble = document.getElementById("bgmBubble");
   const bgmLabel = bgmBubble.querySelector(".bgm-label");
 
-  let isPlayingAudible = false; // 현재 소리 들리는 상태인지
+  let isPlayingAudible = false;
 
   async function startMutedAutoplay() {
     try {
