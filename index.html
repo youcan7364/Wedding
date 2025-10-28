@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <title>우리의 결혼식에 초대합니다</title>
+
+  <style>
+    :root {
+      --bg:#faf9f7;
+      --card:#ffffff;
+      --text-main:#2b2b2b;
+      --text-sub:#6a6a6a;
+      --accent:#bfa07a;
+      --border:#e8e4dc;
+    }
+
+    * {
+      box-sizing:border-box;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      margin:0;
+      padding:0;
+    }
+
+    body {
+      background:var(--bg);
+      color:var(--text-main);
+      font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;
+      line-height:1.5;
+    }
+
+    .page {
+      max-width:480px;
+      margin:0 auto;
+      background:var(--bg);
+      padding-bottom:80px;
+    }
+
+    /* 상단 히어로 */
+    header.hero {
+      background:var(--card);
+      border-bottom:1px solid var(--border);
+      text-align:center;
+      padding-bottom:24px;
+      position:relative;
+    }
+
+    .hero-photo {
+      width:100%;
+      aspect-ratio:4/5;
+      background:#ddd;
+      object-fit:cover;
+      display:block;
+    }
+
+    .names {
+      font-size:1.25rem;
+      font-weight:500;
+      color:var(--text-main);
+      margin-top:20px;
+      letter-spacing:-0.03em;
+    }
+
+    .date-place {
+      font-size:0.9rem;
+      color:var(--text-sub);
+      margin-top:6px;
+      line-height:1.4;
+    }
+
+    /* 섹션 공통 */
+    section {
+      background:var(--card);
+      border-bottom:1px solid var(--border);
+      padding:24px 20px;
+    }
+
+    .section-title {
+      font-size:0.95rem;
+      font-weight:600;
+      color:var(--accent);
+      letter-spacing:-0.03em;
+      text-align:center;
+      margin-bottom:12px;
+    }
+
+    .invitation-text {
+      text-align:center;
+      font-size:0.95rem;
+      color:var(--text-main);
+      letter-spacing:-0.03em;
+      line-height:1.6;
+      white-space:pre-line;
+    }
+
+    /* 정보 카드 */
+    .info-card {
+      border:1px solid var(--border);
+      border-radius:12px;
+      background:#fff;
+      padding:16px 16px 12px;
+      margin-top:12px;
+    }
+
+    .info-row {
+      display:flex;
+      justify-content:space-between;
+      font-size:0.9rem;
+      margin-bottom:8px;
+      line-height:1.4;
+    }
+
+    .info-row .label {
+      color:var(--text-sub);
+      min-width:70px;
+    }
+
+    .info-row .value {
+      color:var(--text-main);
+      text-align:right;
+      font-weight:500;
+    }
+
+    /* 버튼 스타일 */
+    .button-list {
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:16px;
+    }
+
+    .btn {
+      flex:1;
+      text-align:center;
+      background:var(--accent);
+      color:#fff;
+      text-decoration:none;
+      font-size:0.9rem;
+      padding:12px;
+      border-radius:10px;
+      font-weight:500;
+      line-height:1.2;
+      border:none;
+    }
+
+    .btn.sub {
+      background:#fff;
+      color:var(--accent);
+      border:1px solid var(--accent);
+    }
+
+    .small-label {
+      font-size:0.75rem;
+      color:var(--text-sub);
+      margin-bottom:4px;
+      text-align:left;
+      font-weight:500;
+    }
+
+    .subsection {
+      margin-top:20px;
+    }
+
+    .sub-box {
+      border:1px solid var(--border);
+      border-radius:12px;
+      background:#fff;
+      padding:16px;
+      margin-top:8px;
+    }
+
+    .two-col {
+      display:flex;
+      gap:10px;
+    }
+
+    /* ----- 랜덤 모자이크 갤러리 ----- */
+    .gallery-wrap {
+      display:grid;
+      /* 15칸 격자 기반 (가로 15 등분) */
+      grid-template-columns: repeat(15, 1fr);
+      /* 각 행 높이 = 한 칸의 기본 높이. 화면폭 기준으로 반응형 스케일 */
+      grid-auto-rows: calc(100vw / 15);
+      gap:4px;
+      margin-top:16px;
+      max-width:480px;
+      margin-left:auto;
+      margin-right:auto;
+    }
+
+    .gallery-item {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius:8px;
+      border:1px solid var(--border);
+      overflow:hidden;
+      cursor:pointer;
+      background:#ddd;
+      transition:transform 0.15s ease;
+    }
+
+    .gallery-item:active {
+      transform:scale(0.97);
+    }
+
+    .gallery-item img {
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+    }
+
+    /* 전체 화면 라이트박스 */
+    .fullscreen-viewer {
+      position:fixed;
+      left:0;
+      top:0;
+      right:0;
+      bottom:0;
+      background:rgba(0,0,0,0.9);
+      display:none;
+      justify-content:center;
+      align-items:center;
+      flex-direction:column;
+      padding:20px;
+      z-index:10000;
+      color:#fff;
+    }
+
+    .fullscreen-img {
+      max-width:90%;
+      max-height:70vh;
+      object-fit:contain;
+      border-radius:12px;
+      box-shadow:0 25px 50px rgba(0,0,0,0.6);
+      background:#000;
+    }
+
+    .nav-arrow {
+      position:absolute;
+      top:50%;
+      transform:translateY(-50%);
+      font-size:2rem;
+      color:#fff;
+      background:rgba(0,0,0,0.3);
+      border-radius:50%;
+      width:44px;
+      height:44px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      user-select:none;
+      transition:background 0.2s ease;
+    }
+
+    .nav-left { left:16px; }
+    .nav-right { right:16px; }
+
+    .close-fullscreen-btn {
+      margin-top:16px;
+      background:#ffffff22;
+      color:#fff;
+      border:1px solid #ffffff55;
+      border-radius:20px;
+      padding:10px 16px;
+      font-size:0.9rem;
+      line-height:1.2;
+      cursor:pointer;
+      min-width:110px;
+      text-align:center;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    .close-fullscreen-btn:active {
+      background:#ffffff33;
+    }
+
+    /* BGM 풍선 */
+    .bgm-bubble {
+      position: fixed;
+      right: 16px;
+      top: 16px;
+      z-index: 9999;
+      background: rgba(191,160,122,0.95);
+      color: #fff;
+      border-radius: 14px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      line-height: 1.2;
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .note-anim {
+      font-size: 1rem;
+      animation: bounceNote 1s infinite;
+    }
+
+    @keyframes bounceNote {
+      0%   { transform: translateY(0);   }
+      30%  { transform: translateY(-4px);}
+      60%  { transform: translateY(0);   }
+      80%  { transform: translateY(-2px);}
+      100% { transform: translateY(0);   }
+    }
+
+    .bgm-label {
+      white-space: nowrap;
+      color:#fff;
+      letter-spacing:-0.03em;
+      font-weight:500;
+      font-size:0.75rem;
+    }
+
+    footer {
+      text-align:center;
+      color:var(--text-sub);
+      font-size:0.75rem;
+      padding:28px 16px 60px;
+      line-height:1.4;
+      background:var(--card);
+      border-top:1px solid var(--border);
+    }
+
+    /* 계좌 모달 */
+    .modal-backdrop {
+      position:fixed;
+      left:0;
+      top:0;
+      right:0;
+      bottom:0;
+      background:rgba(0,0,0,0.45);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      z-index:9998;
+    }
+
+    .modal {
+      background:#fff;
+      width:100%;
+      max-width:360px;
+      border-radius:14px;
+      padding:20px 20px 16px;
+      box-shadow:0 20px 40px rgba(0,0,0,0.18);
+    }
+
+    .modal-title {
+      text-align:center;
+      font-size:0.95rem;
+      font-weight:600;
+      color:var(--accent);
+      margin-bottom:12px;
+    }
+
+    .account-block {
+      font-size:0.9rem;
+      line-height:1.5;
+      color:var(--text-main);
+      background:#fafafa;
+      border:1px solid var(--border);
+      border-radius:10px;
+      padding:12px;
+      margin-bottom:10px;
+    }
+
+    .close-btn {
+      width:100%;
+      text-align:center;
+      background:var(--accent);
+      color:#fff;
+      border-radius:10px;
+      font-size:0.9rem;
+      padding:12px;
+      font-weight:500;
+      border:none;
+    }
+
+    a {
+      color:inherit;
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- 상단 히어로 -->
+  <header class="hero">
+    <img class="hero-photo" src="main_photo.jpg" alt="우리 사진" />
+    <div class="names">안성모 · 김세은</div>
+    <div class="date-place">
+      2026년 3월 28일 토요일 오후 12시<br/>
+      라튜웨딩컨벤션 3층 끌레르벨
+    </div>
+  </header>
+
+  <!-- 음악 컨트롤 풍선 -->
+  <div id="bgmBubble" class="bgm-bubble">
+    <div class="note-anim">🎵</div>
+    <div class="bgm-label">탭해서 소리 켜기</div>
+  </div>
+  <audio id="bgmAudio" src="song.mp3" loop playsinline></audio>
+
+  <!-- 초대글 -->
+  <section>
+    <div class="section-title">INVITATION</div>
+    <div class="invitation-text">
+세상의 수많은 인연 속에서
+서로의 계절이 되어 주었습니다.
+
+세상 하나뿐인 인연이 되어
+은빛 약속으로 사랑을 맺습니다.
+성실한 마음과 따뜻한 미소로
+모든 날을 함께 걸어가려 합니다
+
+귀한 걸음으로 축복해 주시면
+더없는 기쁨이 되겠습니다.
+    </div>
+  </section>
+
+  <!-- 예식 안내 -->
+  <section>
+    <div class="section-title">WEDDING DAY</div>
+
+    <div class="info-card">
+      <div class="info-row">
+        <div class="label">일시</div>
+        <div class="value">2026년 3월 28일 (토)<br/>오후 12시</div>
+      </div>
+
+      <div class="info-row">
+        <div class="label">장소</div>
+        <div class="value">라뷰웨딩컨벤션<br/>3층 끌레르벨</div>
+      </div>
+
+      <div class="info-row">
+        <div class="label">주소</div>
+        <div class="value">경상북도 구미시 새마을로 225 라뷰웨딩컨벤션</div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="small-label">오시는 길</div>
+      <div class="sub-box">
+        <div class="button-list">
+          <a class="btn" href="https://kko.kakao.com/V2MnM5bLbc" target="_blank" rel="noopener noreferrer">카카오맵 열기</a>
+          <a class="btn sub" href="https://naver.me/5uIkCnl1" target="_blank" rel="noopener noreferrer">네이버지도 열기</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="subsection">
+      <div class="small-label">연락처</div>
+      <div class="sub-box">
+        <div class="two-col">
+
+          <div style="flex:1;">
+            <div class="small-label">신랑</div>
+            <div style="font-size:0.9rem; font-weight:500; color:var(--text-main); margin-bottom:8px;">
+              안성모
+            </div>
+            <div class="button-list" style="margin-top:0;">
+              <a class="btn" href="tel:010-2365-6960">전화</a>
+              <a class="btn sub" href="sms:010-2365-6960">문자</a>
+            </div>
+          </div>
+
+          <div style="flex:1;">
+            <div class="small-label">신부</div>
+            <div style="font-size:0.9rem; font-weight:500; color:var(--text-main); margin-bottom:8px;">
+              김세은
+            </div>
+            <div class="button-list" style="margin-top:0;">
+              <a class="btn" href="tel:010-3833-4655">전화</a>
+              <a class="btn sub" href="sms:010-3833-4655">문자</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- 축하 메시지 -->
+  <section>
+    <div class="section-title">MESSAGE</div>
+
+    <div class="info-card">
+      <div class="invitation-text" style="font-size:0.9rem; text-align:left;">
+        마음 전해주실 한마디가 저희에게 큰 힘이 됩니다. 🌿
+      </div>
+
+      <div class="button-list" style="margin-top:16px;">
+        <a class="btn" href="https://forms.gle/your-google-form" target="_blank" rel="noopener noreferrer">
+          축하 메시지 남기기
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- OUR MOMENTS: 랜덤 모자이크 갤러리 -->
+  <section>
+    <div class="section-title">OUR MOMENTS</div>
+
+    <div class="gallery-wrap" id="galleryWrap">
+      <div class="gallery-item" data-index="1"><img src="photo1.jpg" alt="사진 1"/></div>
+      <div class="gallery-item" data-index="2"><img src="photo2.jpg" alt="사진 2"/></div>
+      <div class="gallery-item" data-index="3"><img src="photo3.jpg" alt="사진 3"/></div>
+      <div class="gallery-item" data-index="4"><img src="photo4.jpg" alt="사진 4"/></div>
+      <div class="gallery-item" data-index="5"><img src="photo5.jpg" alt="사진 5"/></div>
+      <div class="gallery-item" data-index="6"><img src="photo6.jpg" alt="사진 6"/></div>
+      <div class="gallery-item" data-index="7"><img src="photo7.jpg" alt="사진 7"/></div>
+      <div class="gallery-item" data-index="8"><img src="photo8.jpg" alt="사진 8"/></div>
+      <div class="gallery-item" data-index="9"><img src="photo9.jpg" alt="사진 9"/></div>
+      <div class="gallery-item" data-index="10"><img src="photo10.jpg" alt="사진 10"/></div>
+      <div class="gallery-item" data-index="11"><img src="photo11.jpg" alt="사진 11"/></div>
+      <div class="gallery-item" data-index="12"><img src="photo12.jpg" alt="사진 12"/></div>
+      <div class="gallery-item" data-index="13"><img src="photo13.jpg" alt="사진 13"/></div>
+      <div class="gallery-item" data-index="14"><img src="photo14.jpg" alt="사진 14"/></div>
+      <div class="gallery-item" data-index="15"><img src="photo15.jpg" alt="사진 15"/></div>
+      <div class="gallery-item" data-index="16"><img src="photo16.jpg" alt="사진 16"/></div>
+      <div class="gallery-item" data-index="17"><img src="photo17.jpg" alt="사진 17"/></div>
+      <div class="gallery-item" data-index="18"><img src="photo18.jpg" alt="사진 18"/></div>
+      <div class="gallery-item" data-index="19"><img src="photo19.jpg" alt="사진 19"/></div>
+      <div class="gallery-item" data-index="20"><img src="photo20.jpg" alt="사진 20"/></div>
+    </div>
+  </section>
+
+  <!-- 마음 전하실 곳 -->
+  <section>
+    <div class="section-title">마음 전하실 곳</div>
+
+    <div class="info-card" style="text-align:center;">
+      <div style="font-size:0.9rem; color:var(--text-sub); line-height:1.5;">
+        축하의 마음을 전하고자 하시는 분들을 위해<br/>
+        계좌번호를 안내드립니다.
+      </div>
+
+      <div class="button-list" style="margin-top:16px;">
+        <button class="btn" style="width:100%;" onclick="openModal()">
+          계좌번호 보기
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    감사한 걸음, 오래 기억하겠습니다.
+    <br/><br/>
+    © 2025 S & S Wedding
+  </footer>
+
+</div> <!-- /.page -->
+
+<!-- 계좌 모달 -->
+<div id="accountModal" class="modal-backdrop">
+  <div class="modal">
+    <div class="modal-title">마음 전하실 곳</div>
+
+    <div class="account-block">
+      신랑측<br/>
+      우리은행 1002-123-456789<br/>
+      예금주: 안성모
+    </div>
+
+    <div class="account-block">
+      신부측<br/>
+      국민은행 920102-12-345678<br/>
+      예금주: 김세은
+    </div>
+
+    <button class="close-btn" onclick="closeModal()">닫기</button>
+  </div>
+</div>
+
+<!-- 전체 화면 이미지 뷰어 -->
+<div id="fullscreenViewer" class="fullscreen-viewer">
+  <div class="nav-arrow nav-left" id="prevArrow">◀</div>
+  <img id="fullscreenImg" class="fullscreen-img" src="" alt="확대 이미지" />
+  <div class="nav-arrow nav-right" id="nextArrow">▶</div>
+  <div id="closeFullscreen" class="close-fullscreen-btn">닫기</div>
+</div>
+
+<script>
+  /* ====== 계좌 모달 ====== */
+  function openModal() {
+    document.getElementById("accountModal").style.display = "flex";
+  }
+  function closeModal() {
+    document.getElementById("accountModal").style.display = "none";
+  }
+
+  /* ====== 랜덤 모자이크 갤러리 셀 크기 지정 ======
+     각 아이템에 5x5 또는 10x10 셀 크기를 랜덤으로 부여 */
+  const galleryItems = document.querySelectorAll('.gallery-wrap .gallery-item');
+  galleryItems.forEach(item => {
+    const isBig = Math.random() < 0.4; // 40%는 큰 블럭, 60%는 작은 블럭
+    const smallSpan = 5;  // 작은 블럭은 5칸 x 5칸
+    const bigSpan   = 10; // 큰 블럭은 10칸 x 10칸
+
+    const span = isBig ? bigSpan : smallSpan;
+
+    item.style.gridColumn = `span ${span}`;
+    item.style.gridRow    = `span ${span}`;
+  });
+
+  /* ====== 라이트박스 / 전체 화면 뷰어 ====== */
+  const thumbs = document.querySelectorAll('.gallery-item');
+  const viewer = document.getElementById('fullscreenViewer');
+  const viewerImg = document.getElementById('fullscreenImg');
+  const closeBtn = document.getElementById('closeFullscreen');
+  const prevArrow = document.getElementById('prevArrow');
+  const nextArrow = document.getElementById('nextArrow');
+
+  let currentIndex = 1;
+  const totalPhotos = 20; // photo1.jpg ~ photo20.jpg
+
+  thumbs.forEach(item => {
+    item.addEventListener('click', () => {
+      currentIndex = parseInt(item.getAttribute('data-index'));
+      openViewer();
+    });
+  });
+
+  function openViewer() {
+    viewerImg.src = `photo${currentIndex}.jpg`;
+    viewer.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeViewer() {
+    viewer.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+
+  function showPrev() {
+    currentIndex = currentIndex > 1 ? currentIndex - 1 : totalPhotos;
+    viewerImg.src = `photo${currentIndex}.jpg`;
+  }
+
+  function showNext() {
+    currentIndex = currentIndex < totalPhotos ? currentIndex + 1 : 1;
+    viewerImg.src = `photo${currentIndex}.jpg`;
+  }
+
+  prevArrow.addEventListener('click', (e) => {
+    e.stopPropagation();
+    showPrev();
+  });
+
+  nextArrow.addEventListener('click', (e) => {
+    e.stopPropagation();
+    showNext();
+  });
+
+  closeBtn.addEventListener('click', closeViewer);
+
+  viewer.addEventListener('click', (e) => {
+    if (e.target === viewer) {
+      closeViewer();
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (viewer.style.display === 'flex') {
+      if (e.key === 'ArrowLeft') showPrev();
+      if (e.key === 'ArrowRight') showNext();
+      if (e.key === 'Escape') closeViewer();
+    }
+  });
+
+  /* ====== BGM 자동 무음 재생 + 풍선 토글 ====== */
+  const bgmAudio = document.getElementById("bgmAudio");
+  const bgmBubble = document.getElementById("bgmBubble");
+  const bgmLabel = bgmBubble.querySelector(".bgm-label");
+
+  let isPlayingAudible = false; // 현재 소리 들리는 상태인지
+
+  async function startMutedAutoplay() {
+    try {
+      bgmAudio.muted = true;
+      await bgmAudio.play();
+      bgmLabel.textContent = "탭해서 소리 켜기";
+      isPlayingAudible = false;
+    } catch(e) {
+      bgmLabel.textContent = "탭해서 재생";
+      console.log("Autoplay (muted) failed:", e);
+    }
+  }
+
+  bgmBubble.addEventListener("click", async () => {
+    if (!isPlayingAudible) {
+      try {
+        bgmAudio.muted = false;
+        await bgmAudio.play();
+        isPlayingAudible = true;
+        bgmLabel.textContent = "소리 끄기";
+      } catch(e) {
+        console.log("Play with sound failed:", e);
+      }
+    } else {
+      bgmAudio.muted = true;
+      isPlayingAudible = false;
+      bgmLabel.textContent = "탭해서 소리 켜기";
+    }
+  });
+
+  document.addEventListener("DOMContentLoaded", startMutedAutoplay);
+</script>
+
+</body>
+</html>
