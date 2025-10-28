@@ -16,6 +16,10 @@
       --text-sub:#6a6a6a;
       --accent:#bfa07a;
       --border:#e8e4dc;
+
+      --overlay-bg: rgba(0,0,0,0.45);
+      --overlay-btn-bg: rgba(0,0,0,0.4);
+      --overlay-btn-border: rgba(255,255,255,0.4);
     }
 
     * {
@@ -178,16 +182,17 @@
       gap:10px;
     }
 
-    /* ===== 갤러리 (3열, big/small 리듬) =====
+    /* ===== 갤러리 (3열, 큰 타일 적게) =====
        - 전체 가로 3칸
-       - 한 칸 높이 크게 (140px)
-       - big = 2x2, small = 1x1
-       - dense로 위에서부터 채우도록 시도
+       - 한 칸 높이 크게 (170px)
+       - big = 2x2 (강조컷)
+       - small = 1x1
+       - big은 1, 8, 16번만 사용해서 리듬을 넓게 줌
     */
     .gallery-wrap {
       display:grid;
       grid-template-columns:repeat(3, 1fr);
-      grid-auto-rows:140px;
+      grid-auto-rows:170px;
       grid-auto-flow:dense;
       gap:6px;
       margin-top:16px;
@@ -207,13 +212,11 @@
       transform:scale(0.97);
     }
 
-    /* 작은 타일 */
     .gallery-item.small {
       grid-column:span 1;
       grid-row:span 1;
     }
 
-    /* 큰 타일 */
     .gallery-item.big {
       grid-column:span 2;
       grid-row:span 2;
@@ -225,7 +228,7 @@
       width:100%;
       height:100%;
       object-fit:cover;
-      object-position: top; /* ← 위쪽 기준으로 잘라서 얼굴 위주로 노출 */
+      object-position: top; /* 얼굴/상반신이 잘 보이도록 위쪽 기준으로 크롭 */
       display:block;
     }
 
@@ -246,6 +249,7 @@
       color:#fff;
     }
 
+    /* 상단 가운데: "현재 / 전체" */
     .lightbox-topbar {
       position:absolute;
       top:20px;
@@ -256,6 +260,24 @@
       color:#fff;
       font-weight:500;
       pointer-events:none;
+    }
+
+    /* 오른쪽 상단 X 버튼 */
+    .lightbox-close-btn {
+      position:absolute;
+      top:16px;
+      right:16px;
+      width:36px;
+      height:36px;
+      border-radius:50%;
+      background:var(--overlay-btn-bg);
+      border:1px solid var(--overlay-btn-border);
+      color:#fff;
+      font-size:1rem;
+      line-height:36px;
+      text-align:center;
+      cursor:pointer;
+      user-select:none;
     }
 
     .fullscreen-img {
@@ -286,21 +308,6 @@
 
     .nav-left { left:16px; }
     .nav-right { right:16px; }
-
-    .close-fullscreen-btn {
-      margin-top:16px;
-      background:#ffffff22;
-      color:#fff;
-      border:1px solid #ffffff55;
-      border-radius:20px;
-      padding:10px 16px;
-      font-size:0.9rem;
-      line-height:1.2;
-      cursor:pointer;
-      min-width:110px;
-      text-align:center;
-      -webkit-tap-highlight-color:transparent;
-    }
 
     /* ===== 떠 있는 BGM 풍선 ===== */
     .bgm-bubble {
@@ -532,46 +539,34 @@
     </div>
   </section>
 
-  <!-- ===== OUR MOMENTS (3열, 20장, big 리듬 분산) ===== -->
+  <!-- ===== OUR MOMENTS (3열, big 줄인 버전, 총 20장) ===== -->
   <section>
     <div class="section-title">OUR MOMENTS</div>
 
     <div class="gallery-wrap">
-      <!-- 강한 시작: big highlight -->
+      <!-- big: photo1 -->
       <div class="gallery-item big"   data-index="1"><img src="photo1.jpg"  alt="photo1"></div>
       <div class="gallery-item small" data-index="2"><img src="photo2.jpg"  alt="photo2"></div>
       <div class="gallery-item small" data-index="3"><img src="photo3.jpg"  alt="photo3"></div>
-
-      <!-- 부드러운 연결 -->
       <div class="gallery-item small" data-index="4"><img src="photo4.jpg"  alt="photo4"></div>
-
-      <!-- 두 번째 하이라이트 big -->
-      <div class="gallery-item big"   data-index="5"><img src="photo5.jpg"  alt="photo5"></div>
-
-      <!-- 템포 가볍게 -->
+      <div class="gallery-item small" data-index="5"><img src="photo5.jpg"  alt="photo5"></div>
       <div class="gallery-item small" data-index="6"><img src="photo6.jpg"  alt="photo6"></div>
       <div class="gallery-item small" data-index="7"><img src="photo7.jpg"  alt="photo7"></div>
 
-      <!-- 세 번째 big 중간부 피크 -->
+      <!-- big: photo8 -->
       <div class="gallery-item big"   data-index="8"><img src="photo8.jpg"  alt="photo8"></div>
 
-      <!-- 다시 스냅 컷들 -->
       <div class="gallery-item small" data-index="9"><img src="photo9.jpg"   alt="photo9"></div>
       <div class="gallery-item small" data-index="10"><img src="photo10.jpg" alt="photo10"></div>
       <div class="gallery-item small" data-index="11"><img src="photo11.jpg" alt="photo11"></div>
-
-      <!-- 네 번째 big로 한 번 더 강조 -->
-      <div class="gallery-item big"   data-index="12"><img src="photo12.jpg" alt="photo12"></div>
-
-      <!-- 디테일 컷들 -->
+      <div class="gallery-item small" data-index="12"><img src="photo12.jpg" alt="photo12"></div>
       <div class="gallery-item small" data-index="13"><img src="photo13.jpg" alt="photo13"></div>
       <div class="gallery-item small" data-index="14"><img src="photo14.jpg" alt="photo14"></div>
       <div class="gallery-item small" data-index="15"><img src="photo15.jpg" alt="photo15"></div>
 
-      <!-- 마지막 구간으로 갈 때 한 번 더 big -->
+      <!-- big: photo16 -->
       <div class="gallery-item big"   data-index="16"><img src="photo16.jpg" alt="photo16"></div>
 
-      <!-- 엔딩 컷들 -->
       <div class="gallery-item small" data-index="17"><img src="photo17.jpg" alt="photo17"></div>
       <div class="gallery-item small" data-index="18"><img src="photo18.jpg" alt="photo18"></div>
       <div class="gallery-item small" data-index="19"><img src="photo19.jpg" alt="photo19"></div>
@@ -630,10 +625,13 @@
 <!-- ===== 전체 화면 라이트박스 ===== -->
 <div id="fullscreenViewer" class="fullscreen-viewer">
   <div class="lightbox-topbar" id="lightboxCounter">1 / 20</div>
+
+  <!-- 닫기(X) 버튼 -->
+  <div class="lightbox-close-btn" id="lightboxCloseBtn">✕</div>
+
   <div class="nav-arrow nav-left" id="prevArrow">◀</div>
   <img id="fullscreenImg" class="fullscreen-img" src="" alt="확대 이미지" />
   <div class="nav-arrow nav-right" id="nextArrow">▶</div>
-  <div id="closeFullscreen" class="close-fullscreen-btn">닫기</div>
 </div>
 
 <script>
@@ -649,10 +647,10 @@
   const thumbs = document.querySelectorAll('.gallery-item');
   const viewer = document.getElementById('fullscreenViewer');
   const viewerImg = document.getElementById('fullscreenImg');
-  const closeBtn = document.getElementById('closeFullscreen');
   const prevArrow = document.getElementById('prevArrow');
   const nextArrow = document.getElementById('nextArrow');
   const counterEl = document.getElementById('lightboxCounter');
+  const closeIcon = document.getElementById('lightboxCloseBtn');
 
   const totalPhotos = 20; // photo1 ~ photo20
   let currentIndex = 1;
@@ -700,14 +698,20 @@
     showNext();
   });
 
-  closeBtn.addEventListener('click', closeViewer);
+  // 새로 만든 X버튼
+  closeIcon.addEventListener('click', (e) => {
+    e.stopPropagation();
+    closeViewer();
+  });
 
+  // 바깥(어두운 배경) 터치 시 닫기
   viewer.addEventListener('click', (e) => {
     if (e.target === viewer) {
       closeViewer();
     }
   });
 
+  // 키보드 지원 (Mac에서 볼 때 편함)
   document.addEventListener('keydown', (e) => {
     if (viewer.style.display === 'flex') {
       if (e.key === 'ArrowLeft') showPrev();
