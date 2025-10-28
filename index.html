@@ -182,18 +182,18 @@
       gap:10px;
     }
 
-    /* ===== 갤러리 (3열, 큰 타일 적게) =====
-       - 전체 가로 3칸
-       - 한 칸 높이 크게 (170px)
-       - big = 2x2 (강조컷)
-       - small = 1x1
-       - big은 1, 8, 16번만 사용해서 리듬을 넓게 줌
+    /* ===== 갤러리 (3열, 안정 레이아웃 버전) =====
+       - 항상 3열 (repeat(3, 1fr))
+       - 한 칸 높이: 170px (크게)
+       - big 타일은 2x2
+       - small 타일은 1x1
+       - grid-auto-flow: row 로 고정 → 기기마다 순서 바뀌는 문제 방지
     */
     .gallery-wrap {
       display:grid;
       grid-template-columns:repeat(3, 1fr);
       grid-auto-rows:170px;
-      grid-auto-flow:dense;
+      grid-auto-flow:row; /* 여기! dense 없앰 */
       gap:6px;
       margin-top:16px;
     }
@@ -212,11 +212,13 @@
       transform:scale(0.97);
     }
 
+    /* 작은 타일 */
     .gallery-item.small {
       grid-column:span 1;
       grid-row:span 1;
     }
 
+    /* 큰 타일 */
     .gallery-item.big {
       grid-column:span 2;
       grid-row:span 2;
@@ -228,7 +230,7 @@
       width:100%;
       height:100%;
       object-fit:cover;
-      object-position: top; /* 얼굴/상반신이 잘 보이도록 위쪽 기준으로 크롭 */
+      object-position: top; /* 위 기준으로 잘라서 얼굴 살리기 */
       display:block;
     }
 
@@ -262,7 +264,7 @@
       pointer-events:none;
     }
 
-    /* 오른쪽 상단 X 버튼 */
+    /* 오른쪽 상단 닫기(X) */
     .lightbox-close-btn {
       position:absolute;
       top:16px;
@@ -270,8 +272,8 @@
       width:36px;
       height:36px;
       border-radius:50%;
-      background:var(--overlay-btn-bg);
-      border:1px solid var(--overlay-btn-border);
+      background:rgba(0,0,0,0.4);
+      border:1px solid rgba(255,255,255,0.4);
       color:#fff;
       font-size:1rem;
       line-height:36px;
@@ -539,13 +541,14 @@
     </div>
   </section>
 
-  <!-- ===== OUR MOMENTS (3열, big 줄인 버전, 총 20장) ===== -->
+  <!-- ===== OUR MOMENTS (3열 / big 3장 / 총 20장) ===== -->
   <section>
     <div class="section-title">OUR MOMENTS</div>
 
     <div class="gallery-wrap">
-      <!-- big: photo1 -->
+      <!-- big highlight 1 -->
       <div class="gallery-item big"   data-index="1"><img src="photo1.jpg"  alt="photo1"></div>
+
       <div class="gallery-item small" data-index="2"><img src="photo2.jpg"  alt="photo2"></div>
       <div class="gallery-item small" data-index="3"><img src="photo3.jpg"  alt="photo3"></div>
       <div class="gallery-item small" data-index="4"><img src="photo4.jpg"  alt="photo4"></div>
@@ -553,7 +556,7 @@
       <div class="gallery-item small" data-index="6"><img src="photo6.jpg"  alt="photo6"></div>
       <div class="gallery-item small" data-index="7"><img src="photo7.jpg"  alt="photo7"></div>
 
-      <!-- big: photo8 -->
+      <!-- big highlight 2 -->
       <div class="gallery-item big"   data-index="8"><img src="photo8.jpg"  alt="photo8"></div>
 
       <div class="gallery-item small" data-index="9"><img src="photo9.jpg"   alt="photo9"></div>
@@ -564,7 +567,7 @@
       <div class="gallery-item small" data-index="14"><img src="photo14.jpg" alt="photo14"></div>
       <div class="gallery-item small" data-index="15"><img src="photo15.jpg" alt="photo15"></div>
 
-      <!-- big: photo16 -->
+      <!-- big highlight 3 -->
       <div class="gallery-item big"   data-index="16"><img src="photo16.jpg" alt="photo16"></div>
 
       <div class="gallery-item small" data-index="17"><img src="photo17.jpg" alt="photo17"></div>
@@ -626,7 +629,7 @@
 <div id="fullscreenViewer" class="fullscreen-viewer">
   <div class="lightbox-topbar" id="lightboxCounter">1 / 20</div>
 
-  <!-- 닫기(X) 버튼 -->
+  <!-- 오른쪽 상단 닫기(X) -->
   <div class="lightbox-close-btn" id="lightboxCloseBtn">✕</div>
 
   <div class="nav-arrow nav-left" id="prevArrow">◀</div>
@@ -698,20 +701,20 @@
     showNext();
   });
 
-  // 새로 만든 X버튼
+  // 오른쪽 상단 ✕
   closeIcon.addEventListener('click', (e) => {
     e.stopPropagation();
     closeViewer();
   });
 
-  // 바깥(어두운 배경) 터치 시 닫기
+  // 배경 클릭 시 닫기
   viewer.addEventListener('click', (e) => {
     if (e.target === viewer) {
       closeViewer();
     }
   });
 
-  // 키보드 지원 (Mac에서 볼 때 편함)
+  // 키보드 지원 (맥 프리뷰용)
   document.addEventListener('keydown', (e) => {
     if (viewer.style.display === 'flex') {
       if (e.key === 'ArrowLeft') showPrev();
